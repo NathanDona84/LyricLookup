@@ -1,0 +1,439 @@
+*{
+    box-sizing: border-box;
+    z-index: 1;
+}
+.dashTop{
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    height: calc(2vw + 150px);
+    background-color: #1DB954;
+}
+.dashTitle{
+    font-family: 'Lobster Two', cursive;
+    font-size: calc(2vw + 90px);
+    margin: 0;
+    text-align: center;
+    color: white;
+}
+.dashSearch{
+    background: linear-gradient(#1DB954, #191414 170px);
+    width: 100%;
+    height: 100%;
+    min-height: calc(100vh - (2vw + 150px));
+    margin: 0;
+    padding: 10px;
+}
+.search{
+    width: 70%;
+    height: 40px;
+    margin: 0px 15% 120px 15%;
+    border-radius: 25px;
+    border: none;
+    box-shadow: 5px 5px 10px #191414;
+    background-color: white;
+    position: sticky;
+    top: 0px;
+    z-index: 5;
+}
+.searchBlock{
+    height: 40px;
+    width: 100%;
+    position: sticky;
+    z-index: 4;
+    top: 0;
+    background-color: #191414;
+}
+.input{
+    width: calc(97% - 20px);
+    height: 40px;
+    margin: 0 0 0 calc(3% + 20px);
+    border-radius: 25px;
+    border: none;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
+.input::-webkit-search-cancel-button{
+    margin-right: 15px;
+    margin-left: 5px;
+}
+.input:focus{
+    outline: none !important;
+    background: transparent;
+}
+.searchIcon{
+    margin: 19.5px calc(1vw + 3px);
+    position: absolute;
+}
+.listCats{
+    color: grey;
+    width: 100%;
+    overflow: hidden;
+    height: 25px;
+    position: sticky;
+    top: 40px;
+    background-color: #191414;
+    z-index: 5;
+}
+.catTitle{
+   margin-left: 4.5vw;
+}
+.catAlbum{
+    margin-left: calc((1vw + 5px) + (25vw + 100px) + 3vw + 31px);
+}
+.catPop{
+    margin-left: calc(5.59vw + 210px);
+}
+.catTime{
+    margin-left: calc(6.41vw - 33px);
+}
+.catBreak{
+    width: 95%;
+    height: 2px;
+    background-color: grey;
+    margin: 5px auto;
+    position: sticky;
+    top: 65px;
+}
+.songList{
+    background-color: #191414;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #191414;
+}
+.songElement{
+    margin: 0;
+    padding: 0;
+}
+.songElement:not(:first-of-type){
+    margin-top: 10px;
+}
+.songElement:not(:last-of-type){
+    margin-bottom: 10px;
+}
+.song{
+    color: white;
+    height: 60px;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+}
+.pageClick{
+    margin: 0 0 0 4.5vw;
+    cursor: pointer;
+}
+.songCover{
+    margin: 0px calc(1vw + 5px) 0px 0;
+    padding: 0;
+    height: 60px;
+    vertical-align: bottom;
+}
+.songNA{
+    height: 50px;
+    width: calc(25vw + 100px);
+    overflow: hidden;
+    margin-top: 5px;
+}
+.songName{
+    margin: 0px;
+    font-size: 17px;
+    font-weight: 400;
+    overflow: hidden;
+    height: 25px;
+}
+.songArtists{
+    margin: 0px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #a5a5a5;
+    overflow: hidden;
+    height: 25px;
+}
+.explicit{
+    margin-right: 5px;
+    padding: 0;
+    background-color: #a5a5a5;
+    color: black;
+    height: 16px;
+    width: 16px;
+    position: relative;
+    bottom: -4px;
+    border-radius: 2px;
+}
+.explicit span{
+    position: relative;
+    top: -5.5px;
+    right: -5px;
+    font-size: 12px;
+    height: 12px;
+    width: 12px;
+    margin: 0;
+    display: inline-block;
+}
+.songAlbum{
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 400;
+    height: 25px;
+    width: 300px;
+    overflow: hidden;
+    position: relative;
+    top: -14px;
+    right: -3vw;
+}
+.songPop{
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 400;
+    height: 25px;
+    width: 30px;
+    overflow: hidden;
+    position: relative;
+    top: -14px;
+    right: -8.59vw;
+}
+.songTime{
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 400;
+    height: 25px;
+    width: 40px;
+    overflow: hidden;
+    position: relative;
+    top: -14px;
+    right: -15vw;
+}
+.songTime span{
+    margin: 0 2px;
+}
+.buttons{
+    height: 56px;
+    width: 130px;
+    position: static;
+    margin-left: 18vw;
+    background-color: #191414;
+    vertical-align: bottom;
+}
+.play{
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    background-color: #1DB954;
+    position: relative;
+    top: -1px;
+    cursor: pointer;
+}
+.playIcon{
+    position: relative;
+    top: -20px;
+    right: -36.5px;
+    z-index: 3;
+    color: rgba(0, 0, 0, 0.895);
+    cursor: pointer;
+}
+.analysis{
+    width: 50px;
+    height: 50px;
+    background-color: grey;
+    position: relative;
+    right: -2vw;
+    top: -33.5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.analIcon{
+    position: relative;
+    top: 13px;
+    right: -13px;
+    z-index: 3;
+    cursor: pointer;
+}
+.dashBottom{
+    width: fit-content;
+    margin: 25px auto 0px auto;
+}
+.dashNP{
+    width: 70px;
+    height: 30px;
+    border-radius: 15px;
+    border: none;
+    background-color: #1DB954;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    display: inline-block;
+    cursor: pointer;
+}
+.prev{
+    margin-right: 10px;
+}
+.next{
+    margin-left: 10px;
+}
+.dashPage{
+    color: white;
+    font-size: 15px;
+}
+.pages{
+    cursor: pointer;
+}
+.pagesDots{
+    margin-left: 10px;
+    font-size: 18px;
+}
+.pages:not(:first-of-type){
+    margin-left: 10px;
+}
+.inline{
+    display: inline-block;
+}
+@media(max-width: 1500px){
+    .buttons{
+        margin-left: 16vw;
+    }
+    .catTime, .songTime{
+        display: none;
+    }
+}
+@media(max-width: 1370px){
+    .buttons{
+        margin-left: 10vw;
+    }
+    .catPop, .songPop{
+        display: none;
+    }
+}
+
+@media(max-width: 1200px){
+    .buttons{
+        margin-left: 10vw;
+    }
+    .songAlbum{
+        width: 200px;
+    }
+}
+@media(max-width: 1050px){
+    .buttons{
+        margin-left: 5vw;
+    }
+    .songAlbum{
+        width: 200px;
+    }
+}
+@media(max-width: 950px){
+    .buttons{
+        margin-left: 15vw;
+    }
+    .catAlbum, .songAlbum{
+        display: none;
+    }
+}
+@media(max-width: 750px){
+    .buttons{
+        margin-left: 5vw;
+    }
+}
+@media(max-width: 650px){
+    .buttons{
+        margin-left: 0px;
+    }
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    
+}
+::-webkit-scrollbar-thumb:active {
+    background-color: rgb(54, 54, 54);
+}
+body {
+    overflow: overlay;
+}
+.error{
+    width: 100%;
+    height: 150px;
+    color: white;
+    font-size: 50px;
+    text-align: center;
+}
+.error p{
+    margin: 0;
+}
+.pageTopTop{
+    background-color: #191414;
+}
+.pageTop{
+    height: 280px;
+    width: 100%;
+    position: sticky;
+    top: 0px;
+}
+.pageArr{
+    position: relative;
+    top: -195px;
+    right: -1.8vw;
+}
+.pageCover{
+    height: 230px;
+    position: relative;
+    top: 30px;
+    right: -10vw;
+    box-shadow: 1px 1px 50px white;
+}
+.pageNAA{
+    position: relative;
+    right: -200px;
+    top: 10px;
+    height: 170px;
+    width: 700px;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid red;
+}
+.pageName{
+    font-size: 50px;
+    margin: 0;
+    width: 100%;
+    font-weight: 500;
+}
+.pageAlbum{
+    margin: 0;
+    font-size: 30px;
+    width: 100%;
+    font-weight: 400;
+    position: relative;
+    top: -5px;
+    right: -5px;
+}
+.pageArtists{
+    margin: 0;
+    font-size: 30px;
+    width: 100%;
+    font-weight: 400;
+    position: relative;
+    top: -5px;
+    right: -5px;
+}
+.userIcon{
+    margin: 0px 10px 0px 17px;
+}
+.usersIcon{
+    margin: 0px 7px 0px 13px;
+}
+.pageLyrics{
+    height: 100%;
+    min-height: calc(100vh );
+    width: 100%;
+}
