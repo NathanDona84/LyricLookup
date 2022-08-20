@@ -5,6 +5,7 @@ import SpotifyWebApi from "spotify-web-api-node"
 import axios from "axios"
 import "./Dashboard.css"
 import { useColor } from 'color-thief-react'
+import SpotifyPlayer from "react-spotify-web-playback"
 
 
 
@@ -20,6 +21,7 @@ export default function Dashboard(props) {
     const [next, setNext] = useState("");
     const [page, setPage] = useState(1);
     const [stop, setStop] = useState(false);
+    const [playback, setPlayback] = useState(undefined);
 
 
     useEffect(() => {
@@ -28,6 +30,7 @@ export default function Dashboard(props) {
     }, [accessToken]);
 
     useEffect(() =>{
+        setPlayback(undefined)
         if(!input) return setResult([]);
         if(!accessToken) return;
 
@@ -35,7 +38,6 @@ export default function Dashboard(props) {
         SpotifyApi.searchTracks(input).then((res) => {
             if(cancel) return;
             setNext(res.body.tracks.next);
-            console.log(res.body);
             if(res.body.tracks.items.length === 0)
                     setResult([<NoResults/>])
             else{
@@ -61,17 +63,37 @@ export default function Dashboard(props) {
                             popularity = {item.popularity}
                             time = {item.duration_ms}
                             explicit = {item.explicit}
+                            playClick = {() => {
+                                setPlayback(<SpotifyPlayer 
+                                                token={accessToken}
+                                                play={true}
+                                                autoPlay={true}
+                                                uris={item.uri ? [item.uri] : []}
+                                                styles={{
+                                                    bgColor: '#1d1717',
+                                                    color: '#fff',
+                                                    loaderColor: 'grey',
+                                                    sliderColor: '#1DB954',
+                                                    trackArtistColor: '#a5a5a5',
+                                                    trackNameColor: '#fff',
+                                                    sliderTrackColor: 'grey'
+                                                  }}
+                                            />)
+                            }}
                             mainClick = {() => {
+                                setPlayback(undefined);
                                 setSelected(
                                     <SongPage 
                                         name = {item.name}
                                         album = {item.album.name}
                                         artists = {item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)})}
+                                        artist = {item.artists[0].name}
                                         uri = {item.uri}
                                         albumUrl = {imageBig.url}
                                         popularity = {item.popularity}
                                         time = {item.duration_ms}
                                         explicit = {item.explicit}
+                                        token = {accessToken}
                                         backClick = {() => {setSelected(undefined)}}
                                     />
                                 )}
@@ -88,8 +110,9 @@ export default function Dashboard(props) {
     }, [input, accessToken]);
 
     useEffect(() =>{setStop(false);}, [stop])
-
+    
     useEffect(() => {
+        setPlayback(undefined)
         if(!accessToken) return;
         if(stop){
             return;
@@ -111,7 +134,6 @@ export default function Dashboard(props) {
             .then(res => {
                 timeout = false;
                 if(cancel) return;
-                console.log(res.data)
                 if(res.data.tracks.items.length === 0)
                     setResult([<NoResults/>])
                 else{
@@ -137,17 +159,37 @@ export default function Dashboard(props) {
                                 popularity = {item.popularity}
                                 time = {item.duration_ms}
                                 explicit = {item.explicit}
+                                playClick = {() => {
+                                    setPlayback(<SpotifyPlayer 
+                                                    token={accessToken}
+                                                    play={true}
+                                                    autoPlay={true}
+                                                    uris={item.uri ? [item.uri] : []}
+                                                    styles={{
+                                                        bgColor: '#1d1717',
+                                                        color: '#fff',
+                                                        loaderColor: 'grey',
+                                                        sliderColor: '#1DB954',
+                                                        trackArtistColor: '#a5a5a5',
+                                                        trackNameColor: '#fff',
+                                                        sliderTrackColor: 'grey'
+                                                      }}
+                                                />)
+                                }}
                                 mainClick = {() => {
+                                    setPlayback(undefined);
                                     setSelected(
                                         <SongPage 
                                             name = {item.name}
                                             album = {item.album.name}
                                             artists = {item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)})}
+                                            artist = {item.artists[0].name}
                                             uri = {item.uri}
                                             albumUrl = {imageBig.url}
                                             popularity = {item.popularity}
                                             time = {item.duration_ms}
                                             explicit = {item.explicit}
+                                            token = {accessToken}
                                             backClick = {() => {setSelected(undefined)}}
                                         />
                                     )}
@@ -174,10 +216,14 @@ export default function Dashboard(props) {
             display: 'none'
         }
     }
+    let bottomMargin={}
+    if(playback)
+        bottomMargin = {marginBottom: '50px'}
     if(result.length === 1 && page!=1){
         invisible2={}
     }
     if(selected){
+        window.scrollTo(0, 0);
         return (
             <div>
                 {selected}
@@ -236,10 +282,13 @@ export default function Dashboard(props) {
             <ul className="songList">
                 {result}
             </ul>
-            <div className="dashBottom">
+            <div className="dashBottom" style={bottomMargin}>
                 <button className="dashNP prev inline" style={invisible2} onClick ={() => {if(page>1) setPage(page-1)}}>Prev</button>
                 <span className="dashPage inline" style={invisible2}>{pages}</span>
                 <button className="dashNP next inline" style={invisible2} onClick={() => {setPage(page+1)}}>Next</button>
+            </div>
+            <div className="playbackDiv">
+                {playback}
             </div>
         </div>
     </div>
@@ -247,6 +296,7 @@ export default function Dashboard(props) {
 }
 
 function Song(props){
+    
     let exp;
     if(props.explicit)
         exp = <span className="explicit inline"><span>E</span></span>;
@@ -267,8 +317,8 @@ function Song(props){
                 <span className="songTime inline">{min}<span>:</span>{sec}</span>
             </div>
             <div className="buttons inline">
-                <i onClick = {() => {console.log("hey")}} className="fa-solid fa-play fa-xl playIcon inline"></i>
-                <div onClick = {() => {console.log("hey")}} className="play inline"></div>
+                <i onClick = {props.playClick} className="fa-solid fa-play fa-xl playIcon inline"></i>
+                <div onClick = {props.playClick} className="play inline"></div>
                 <div className="analysis inline"><i className="fa-solid fa-calculator fa-2xl analIcon inline"></i></div>
             </div>
         </div>
@@ -284,14 +334,26 @@ function SongPage(props){
     let primaryColor = (red*0.299 + green*0.587 + blue*0.114) > 130 ? '#000000' : '#ffffff';
     let secondaryColor = (red*0.299 + green*0.587 + blue*0.114) > 130 ? '#333' : '#aaaaaa';
 
+    const [lyrics, setLyrics] = useState("")
+    axios
+        .get('http://localhost:3001/lyrics', {
+            params: {
+                track: props.name,
+                artist: props.artist,
+              },
+            })
+            .then(res => {
+                setLyrics(res.data.lyrics);
+            })
+
     let artIcon;
     let albMargin;
     if(props.artists.length === 1){
-        artIcon = <i class="fa-solid fa-user fa-sm userIcon"></i>;
+        artIcon = <i className="fa-solid fa-user fa-sm userIcon"></i>;
         albMargin = {margin: '0px 8.5px 0px 15px'}
     }
     else{
-        artIcon = <i class="fa-solid fa-users fa-sm usersIcon"></i>;
+        artIcon = <i className="fa-solid fa-users fa-sm usersIcon"></i>;
         albMargin = {margin: '0px 11px 0px 15.5px'}
     }
     
@@ -316,8 +378,25 @@ function SongPage(props){
                     <div className="pageArtists" style={{color: secondaryColor}}>{artIcon}{props.artists}</div>
                 </div>
             </div>
-            <div className="pageLyrics">
-
+            <div className="pageLyrics" style={{whiteSpace: 'pre'}}>
+                {lyrics}
+            </div>
+            <div className="playbackDiv">
+                <SpotifyPlayer 
+                    token={props.token}
+                    play={true}
+                    autoPlay={false}
+                    uris={props.uri ? [props.uri] : []}
+                    styles={{
+                        bgColor: '#1d1717',
+                        color: '#fff',
+                        loaderColor: 'grey',
+                        sliderColor: '#1DB954',
+                        trackArtistColor: '#a5a5a5',
+                        trackNameColor: '#fff',
+                        sliderTrackColor: 'grey'
+                        }}
+                    />
             </div>
         </div>
     )
