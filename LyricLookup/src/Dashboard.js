@@ -52,12 +52,15 @@ export default function Dashboard(props) {
                             return elem;
                         return acc;
                     }, item.album.images[0]);
+                    const name = item.name.indexOf("(") === -1 ? item.name : item.name.substring(0, item.name.indexOf("("));
+                    const album = item.album.name.indexOf("(") === -1 ? item.album.name : item.album.name.substring(0, item.album.name.indexOf("("));
+                    const artists = item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)});
                     return(
                         <li key = {item.id} className="songElement">
                             <Song key = {item.id}
-                            name = {item.name}
-                            album = {item.album.name}
-                            artists = {item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)})}
+                            name = {name}
+                            album = {album}
+                            artists = {artists}
                             uri = {item.uri}
                             albumUrl = {image.url}
                             popularity = {item.popularity}
@@ -84,9 +87,9 @@ export default function Dashboard(props) {
                                 setPlayback(undefined);
                                 setSelected(
                                     <SongPage 
-                                        name = {item.name}
-                                        album = {item.album.name}
-                                        artists = {item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)})}
+                                        name = {name}
+                                        album = {album}
+                                        artists = {artists}
                                         artist = {item.artists[0].name}
                                         uri = {item.uri}
                                         albumUrl = {imageBig.url}
@@ -94,6 +97,7 @@ export default function Dashboard(props) {
                                         time = {item.duration_ms}
                                         explicit = {item.explicit}
                                         token = {accessToken}
+                                        id = {item.id}
                                         backClick = {() => {setSelected(undefined)}}
                                     />
                                 )}
@@ -148,12 +152,15 @@ export default function Dashboard(props) {
                                 return elem;
                             return acc;
                         }, item.album.images[0]);
+                        const name = item.name.indexOf("(") === -1 ? item.name : item.name.substring(0, item.name.indexOf("("));
+                        const album = item.album.name.indexOf("(") === -1 ? item.album.name : item.album.name.substring(0, item.album.name.indexOf("("));
+                        const artists = item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)});
                         return(
                             <li key = {item.id} className="songElement">
                                 <Song key = {item.id}
-                                name = {item.name}
-                                album = {item.album.name}
-                                artists = {item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)})}
+                                name = {name}
+                                album = {album}
+                                artists = {artists}
                                 uri = {item.uri}
                                 albumUrl = {image.url}
                                 popularity = {item.popularity}
@@ -180,9 +187,9 @@ export default function Dashboard(props) {
                                     setPlayback(undefined);
                                     setSelected(
                                         <SongPage 
-                                            name = {item.name}
-                                            album = {item.album.name}
-                                            artists = {item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)})}
+                                            name = {name}
+                                            album = {album}
+                                            artists = {artists}
                                             artist = {item.artists[0].name}
                                             uri = {item.uri}
                                             albumUrl = {imageBig.url}
@@ -190,6 +197,7 @@ export default function Dashboard(props) {
                                             time = {item.duration_ms}
                                             explicit = {item.explicit}
                                             token = {accessToken}
+                                            id = {item.id}
                                             backClick = {() => {setSelected(undefined)}}
                                         />
                                     )}
@@ -216,12 +224,19 @@ export default function Dashboard(props) {
             display: 'none'
         }
     }
-    let bottomMargin={}
-    if(playback)
-        bottomMargin = {marginBottom: '50px'}
     if(result.length === 1 && page!=1){
         invisible2={}
     }
+
+
+    let bottomMargin={}
+    let noDisplay = {}
+    if(playback)
+        bottomMargin = {marginBottom: '50px'}
+    else
+        noDisplay = {display: 'none'}
+
+
     if(selected){
         window.scrollTo(0, 0);
         return (
@@ -230,6 +245,8 @@ export default function Dashboard(props) {
             </div>
             )
     }
+
+
     let pages = [];
     if(page<11){
         for(let i=1; i<11; i++){
@@ -256,6 +273,8 @@ export default function Dashboard(props) {
         pages.push(<span className="pagesDots inline" >...</span>);
         pages.push(<span className="pages inline" onClick={() => setPage(index+19)}>{index+19}</span>);
     }
+
+
     return(
     <div>
         <div className="dashTop">
@@ -287,7 +306,7 @@ export default function Dashboard(props) {
                 <span className="dashPage inline" style={invisible2}>{pages}</span>
                 <button className="dashNP next inline" style={invisible2} onClick={() => {setPage(page+1)}}>Next</button>
             </div>
-            <div className="playbackDiv">
+            <div className="playbackDiv" style={noDisplay}>
                 {playback}
             </div>
         </div>
@@ -296,7 +315,6 @@ export default function Dashboard(props) {
 }
 
 function Song(props){
-    
     let exp;
     if(props.explicit)
         exp = <span className="explicit inline"><span>E</span></span>;
@@ -304,17 +322,19 @@ function Song(props){
     let sec = Math.trunc(tSec%60);
     sec = sec.toString().length == 1 ? "0"+sec : sec;
     let min = Math.trunc(tSec/60);
+
     return(
         <div className="song">
             <div className="pageClick inline" onClick={props.mainClick}>
                 <img className="songCover inline" src = {props.albumUrl}/>
                 <div className="songNA inline">
-                    <p className="songName">{props.name.indexOf("(") === -1 ? props.name : props.name.substring(0, props.name.indexOf("("))}</p>
+                    <p className="songName">{props.name}</p>
                     <p className="songArtists">{exp}{props.artists}</p>
                 </div>
-                <span className="songAlbum inline">{props.album.indexOf("(") === -1 ? props.album : props.album.substring(0, props.album.indexOf("("))}</span>
+                <span className="songAlbum inline">{props.album}</span>
                 <span className="songPop inline">{props.popularity}  </span>
                 <span className="songTime inline">{min}<span>:</span>{sec}</span>
+                <div className="songBuffer inline"></div>
             </div>
             <div className="buttons inline">
                 <i onClick = {props.playClick} className="fa-solid fa-play fa-xl playIcon inline"></i>
@@ -335,16 +355,23 @@ function SongPage(props){
     let secondaryColor = (red*0.299 + green*0.587 + blue*0.114) > 130 ? '#333' : '#aaaaaa';
 
     const [lyrics, setLyrics] = useState("")
-    axios
-        .get('http://localhost:3001/lyrics', {
-            params: {
-                track: props.name,
-                artist: props.artist,
-              },
-            })
-            .then(res => {
-                setLyrics(res.data.lyrics);
-            })
+    const [features, setFeatures] = useState({})
+    const [firstRender, setFirstRender] = useState(true);
+    const artist = props.artist.indexOf("(") === -1 ? props.artist : props.artist.substring(0, props.artist.indexOf("("));
+    if(firstRender){
+        setFirstRender(false);
+        axios
+            .get('http://localhost:3001/lyrics', {
+                params: {
+                    track: props.name,
+                    artist: artist,
+                },
+                })
+                .then(res => {
+                    setLyrics(res.data.lyrics);
+                })
+        SpotifyApi.getAudioFeaturesForTrack(props.id).then((res) => {console.log(res.body); setFeatures(res.body)})
+    }
 
     let artIcon;
     let albMargin;
@@ -360,20 +387,16 @@ function SongPage(props){
     let exp;
     if(props.explicit)
         exp = <span className="explicit inline"><span>E</span></span>;
-    let tSec = props.time/1000;
-    let sec = Math.trunc(tSec%60);
-    sec = sec.toString().length == 1 ? "0"+sec : sec;
-    let min = Math.trunc(tSec/60);
     return(
-        <div className='pageTopTop' style={{ background: `linear-gradient(${data} 280px, #191414 450px)`, color: primaryColor}}>
-            <div className="pageTop" style={{background: data}}>
+        <div className='pageTopTop' style={{ background: `linear-gradient(${data} 150px, #191414 400px)`, color: primaryColor}}>
+            <div className="pageTop">
                 <div className="pageArr inline" onClick={props.backClick}><i className="fa-solid fa-arrow-left fa-2xl inline"></i></div>
                 <img className="pageCover inline" src = {props.albumUrl}/>
                 <div className="pageNAA inline">
-                    <p className="pageName">{props.name.indexOf("(") === -1 ? props.name : props.name.substring(0, props.name.indexOf("("))}</p>
+                    <p className="pageName">{props.name}</p>
                     <p className="pageAlbum" style={{color: secondaryColor}}>
                         <i className="fa-solid fa-compact-disc fa-sm albumIcon inline" style = {albMargin}></i>
-                        {props.album.indexOf("(") === -1 ? props.album : props.album.substring(0, props.album.indexOf("("))}
+                        {props.album}
                     </p>
                     <div className="pageArtists" style={{color: secondaryColor}}>{artIcon}{props.artists}</div>
                 </div>
