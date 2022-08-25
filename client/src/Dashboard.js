@@ -337,7 +337,6 @@ function Song(props){
                 <span className="songAlbum inline">{props.album}</span>
                 <span className="songPop inline">{props.popularity}  </span>
                 <span className="songTime inline">{min}<span>:</span>{sec}</span>
-                <div className="songBuffer inline"></div>
             </div>
             <div className="buttons inline">
                 <div onClick = {props.playClick} className="play inline" title="play"><i className="fa-solid fa-play fa-xl playIcon inline" title='Play'></i></div>
@@ -360,6 +359,7 @@ function SongPage(props){
     const [lyrics, setLyrics] = useState("")
     const [features, setFeatures] = useState({})
     const [firstRender, setFirstRender] = useState(true);
+    const [lock, setLock] = useState(false);
     const artist = props.artist.indexOf("(") === -1 ? props.artist : props.artist.substring(0, props.artist.indexOf("("));
     if(firstRender){
         setFirstRender(false);
@@ -390,6 +390,11 @@ function SongPage(props){
     let exp;
     if(props.explicit)
         exp = <span className="explicit inline"><span>E</span></span>;
+    let analysisStyle = {color: primaryColor};
+    if(lock){
+        analysisStyle.height = '280px';
+        analysisStyle.width = '350px';
+    }
     return(
         <div className='pageTopTop' style={{ background: `linear-gradient(${data} 150px, #191414 400px)`, color: primaryColor}}>
             <div className="pageTop">
@@ -403,7 +408,7 @@ function SongPage(props){
                     </p>
                     <div className="pageArtists" style={{color: secondaryColor}}>{artIcon}{props.artists}</div>
                 </div>
-                <div className="pageAnalysis inline" style={{color: primaryColor}}>
+                <div className="pageAnalysis inline" style={analysisStyle} onClick={() => {setLock(!lock)}}>
                     <div className="pageAnalysisTop inline"><p>Analysis</p></div>
                     <div className="pageAnalysisBody inline">
                         <span><span>Instrumentalness:</span> {(features.instrumentalness*100).toFixed(2)}</span>

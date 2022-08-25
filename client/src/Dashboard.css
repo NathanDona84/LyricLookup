@@ -86,7 +86,7 @@
     margin-left: calc(5.59vw + 210px);
 }
 .catTime{
-    margin-left: calc(6.41vw - 33px);
+    margin-left: calc(9.41vw - 33px);
 }
 .catBreak{
     width: 95%;
@@ -95,6 +95,7 @@
     margin: 5px auto;
     position: sticky;
     top: 65px;
+    z-index: 5;
 }
 .songList{
     background-color: #191414;
@@ -205,21 +206,17 @@
     overflow: hidden;
     position: relative;
     top: -14px;
-    right: -15vw;
+    right: -18vw;
 }
 .songTime span{
     margin: 0 2px;
 }
-.songBuffer{
-    width: 19vw;
-    height: 55px;
-}
 .buttons{
     height: 56px;
     width: 130px;
-    position: static;
+    position: absolute;
     background-color: #191414;
-    vertical-align: bottom;
+    right: 5%;
 }
 .play{
     width: 50px;
@@ -228,7 +225,7 @@
     background-color: #1DB954;
     position: relative;
     cursor: pointer;
-    top: -1px;
+    top: 5px;
     transition: all 0.1s ease;
     transform: scale(1);
 }
@@ -250,8 +247,8 @@
     height: 50px;
     background-color: grey;
     position: relative;
-    right: -2vw;
-    top: -1px;
+    right: -1.7vw;
+    top: 5px;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.1s ease;
@@ -328,52 +325,38 @@
         width: 30%;
     }
 }
-@media(max-width: 1470px){
-    .songBuffer{
-        width: 16vw;
+@media(max-width: 1600px){
+    .catTime{
+        margin-left: calc(7.41vw - 33px);
+    } 
+    .songTime{
+        right: -16vw;
     }
+}
+@media(max-width: 1470px){
     .catTime, .songTime{
         display: none;
     }
 }
 @media(max-width: 1300px){
-    .songBuffer{
-        width: 10vw;
+    .catPop{
+        margin-left: calc(5.59vw + 105px);
+    } 
+    .songPop{
+        right: -8.59vw
     }
-    .catPop, .songPop{
+    .songAlbum{
+        width: 200px;
+    }
+}
+@media(max-width: 1050px){
+    .songPop, .catPop{
         display: none;
     }
 }
-
-@media(max-width: 1130px){
-    .songAlbum{
-        width: 200px;
-    }
-}
-@media(max-width: 900px){
-    .songBuffer{
-        width: 5vw;
-    }
-    .songAlbum{
-        width: 200px;
-    }
-}
-@media(max-width: 950px){
-    .songBuffer{
-        width: 15vw;
-    }
+@media(max-width: 830px){
     .catAlbum, .songAlbum{
         display: none;
-    }
-}
-@media(max-width: 750px){
-    .songBuffer{
-        width: 5vw;
-    }
-}
-@media(max-width: 650px){
-    .songBuffer{
-        width: 0vw;
     }
 }
 ::-webkit-scrollbar {
