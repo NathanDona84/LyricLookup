@@ -227,14 +227,21 @@
     border-radius: 100%;
     background-color: #1DB954;
     position: relative;
-    top: -1px;
     cursor: pointer;
+    top: -1px;
+    transition: all 0.1s ease;
+    transform: scale(1);
+}
+.play:hover{
+    transform: scale(1.1);
+}
+.play:active{
+    background-color: #14331f;
 }
 .playIcon{
     position: relative;
-    top: -20px;
-    right: -36.5px;
-    z-index: 3;
+    top: 13px;
+    right: -18px;
     color: rgba(0, 0, 0, 0.895);
     cursor: pointer;
 }
@@ -244,9 +251,17 @@
     background-color: grey;
     position: relative;
     right: -2vw;
-    top: -33.5px;
+    top: -1px;
     border-radius: 5px;
     cursor: pointer;
+    transition: all 0.1s ease;
+    transform: scale(1);
+}
+.analysis:hover{
+    transform: scale(1.1);
+}
+.analysis:active{
+    background-color: rgb(48, 48, 48);
 }
 .analIcon{
     position: relative;
@@ -452,6 +467,57 @@ body {
 .usersIcon{
     margin: 0px 7px 0px 13px;
 }
+.pageAnalysis{
+    position: absolute;
+    top: 0px;
+    right: 40px;
+    font-family: 'Lobster Two', cursive;
+    width: 200px; 
+    text-align: center;
+    height: 55px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: height 1s ease,
+                width 1s ease;
+}
+.pageAnalysis:hover{
+    width: 350px;
+    height: 280px;
+}
+.pageAnalysis p{
+    margin: 0;
+}
+.pageAnalysisTop{
+    height: 55px;
+    width: 100%;
+    font-size: 40px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    padding: 0;
+    overflow: hidden;
+}
+.pageAnalysisBody{
+    width: 100%;
+    height: 245px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+}
+.pageAnalysisBody span{
+    width: 50%;
+    height: 15%;
+    overflow: hidden;
+}
+.pageAnalysisBody span span{
+    font-weight: 500;
+    overflow: hidden;
+}
 .pageLyrics{
     height: 100%;
     min-height: calc(100vh - 280px);
@@ -462,4 +528,5 @@ body {
     font-size: 20px;
     padding-top: 120px;
     padding-bottom: 100px;
+    font-weight: 300;
 }

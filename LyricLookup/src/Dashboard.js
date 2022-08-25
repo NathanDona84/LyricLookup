@@ -152,9 +152,12 @@ export default function Dashboard(props) {
                                 return elem;
                             return acc;
                         }, item.album.images[0]);
+
                         const name = item.name.indexOf("(") === -1 ? item.name : item.name.substring(0, item.name.indexOf("("));
                         const album = item.album.name.indexOf("(") === -1 ? item.album.name : item.album.name.substring(0, item.album.name.indexOf("("));
                         const artists = item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)});
+                        
+                        
                         return(
                             <li key = {item.id} className="songElement">
                                 <Song key = {item.id}
@@ -337,8 +340,7 @@ function Song(props){
                 <div className="songBuffer inline"></div>
             </div>
             <div className="buttons inline">
-                <i onClick = {props.playClick} className="fa-solid fa-play fa-xl playIcon inline"></i>
-                <div onClick = {props.playClick} className="play inline"></div>
+                <div onClick = {props.playClick} className="play inline" title="play"><i className="fa-solid fa-play fa-xl playIcon inline" title='Play'></i></div>
                 <div className="analysis inline"><i className="fa-solid fa-calculator fa-2xl analIcon inline"></i></div>
             </div>
         </div>
@@ -352,6 +354,7 @@ function SongPage(props){
     let green = parseInt(data.substring(3,5), 16);
     let blue = parseInt(data.substring(5,7), 16);
     let primaryColor = (red*0.299 + green*0.587 + blue*0.114) > 130 ? '#000000' : '#ffffff';
+    let oppPrimaryColor = (red*0.299 + green*0.587 + blue*0.114) > 130 ?  '#ffffff' : '#000000';
     let secondaryColor = (red*0.299 + green*0.587 + blue*0.114) > 130 ? '#333' : '#aaaaaa';
 
     const [lyrics, setLyrics] = useState("")
@@ -399,6 +402,23 @@ function SongPage(props){
                         {props.album}
                     </p>
                     <div className="pageArtists" style={{color: secondaryColor}}>{artIcon}{props.artists}</div>
+                </div>
+                <div className="pageAnalysis inline" style={{color: primaryColor}}>
+                    <div className="pageAnalysisTop inline"><p>Analysis</p></div>
+                    <div className="pageAnalysisBody inline">
+                        <span><span>Instrumentalness:</span> {(features.instrumentalness*100).toFixed(2)}</span>
+                        <span><span>Acousticness:</span> {(features.acousticness*100).toFixed(2)}</span>
+                        <span><span>Danceability:</span> {(features.danceability*100).toFixed(2)}</span>
+                        <span><span>Speechiness:</span> {(features.speechiness*100).toFixed(2)}</span>
+                        <span><span>Liveness:</span> {(features.liveness*100).toFixed(2)}</span>
+                        <span><span>Energy:</span> {(features.energy*100).toFixed(2)}</span>
+                        <span><span>Time Signature:</span> {features.time_signature}</span>
+                        <span><span>Loudness:</span> {features.loudness}</span>
+                        <span><span>Duration:</span> {features.duration_ms}</span>
+                        <span><span>Valence:</span> {features.valence}</span>
+                        <span><span>Tempo:</span> {features.tempo}</span>
+                        <span><span>Key:</span> {features.key}</span>
+                    </div>
                 </div>
             </div>
             <div className="pageLyrics" style={{whiteSpace: 'pre'}}>
