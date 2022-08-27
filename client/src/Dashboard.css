@@ -123,6 +123,7 @@
 .pageClick{
     margin: 0 0 0 4.5vw;
     cursor: pointer;
+    padding-right: calc(100vw - (1vw + 5px) - 4.5vw - calc(25vw + 100px) - 3vw - 300px - 5.59vw - 9.41vw - 70px);
 }
 .songCover{
     margin: 0px calc(1vw + 5px) 0px 0;
@@ -227,7 +228,6 @@
     cursor: pointer;
     top: 5px;
     transition: all 0.1s ease;
-    transform: scale(1);
 }
 .play:hover{
     transform: scale(1.1);
@@ -252,7 +252,6 @@
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.1s ease;
-    transform: scale(1);
 }
 .analysis:hover{
     transform: scale(1.1);
@@ -332,6 +331,9 @@
     .songTime{
         right: -16vw;
     }
+    .pageClick{
+        padding-right: calc(100vw - (1vw + 5px) - 4.5vw - calc(25vw + 100px) - 3vw - 300px - 5.59vw - 11.41vw - 70px);
+    }
 }
 @media(max-width: 1470px){
     .catTime, .songTime{
@@ -342,11 +344,11 @@
     .catPop{
         margin-left: calc(5.59vw + 105px);
     } 
-    .songPop{
-        right: -8.59vw
-    }
     .songAlbum{
         width: 200px;
+    }
+    .pageClick{
+        padding-right: calc(100vw - (1vw + 5px) - 4.5vw - calc(25vw + 100px) - 3vw - 200px - 5.59vw - 11.41vw - 90px);
     }
 }
 @media(max-width: 1050px){
@@ -399,8 +401,19 @@ body {
 .pageArr{
     position: fixed;
     top: 20px;
-    left: 20px;
+    left: 25px;
     z-index: 6;
+    transition: scale 0.1s ease;
+    height: 35px;
+    width: 40px;
+}
+.pageArr:hover{
+    transform: scale(1.2);
+}
+.pageArr i{
+    position: relative;
+    top: 5px;
+    left: 5px;
 }
 .pageCover{
     height: 230px;
@@ -460,12 +473,15 @@ body {
     height: 55px;
     overflow: hidden;
     cursor: pointer;
-    transition: height 1s ease,
+    transition: height 1s ease ,
                 width 1s ease;
+    visibility: hidden;
+    padding-left: 10px;
 }
 .pageAnalysis:hover{
     width: 350px;
     height: 280px;
+    visibility: visible;
 }
 .pageAnalysis p{
     margin: 0;
@@ -478,6 +494,9 @@ body {
     margin: 0 0 10px 0;
     padding: 0;
     overflow: hidden;
+}
+.pageAnalysisTop p{
+    visibility: visible;
 }
 .pageAnalysisBody{
     width: 100%;
@@ -492,12 +511,12 @@ body {
     font-family: 'Roboto', sans-serif;
     overflow: hidden;
 }
-.pageAnalysisBody span{
+.pageAnalysisBody span, .songAnalysisBody span{
     width: 50%;
     height: 15%;
     overflow: hidden;
 }
-.pageAnalysisBody span span{
+.pageAnalysisBody span span, .songAnalysisBody span span{
     font-weight: 500;
     overflow: hidden;
 }
@@ -512,4 +531,69 @@ body {
     padding-top: 120px;
     padding-bottom: 100px;
     font-weight: 300;
+}
+
+.flexible-modal {
+    position: absolute;
+    z-index: 8 !important;
+    border: none !important;
+    background: white;
+    color: black;
+    border-radius: 15px;
+}
+.flexible-modal-mask {
+    position: fixed;
+    height: 100%;
+    background: transparent !important;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+.flexible-modal-drag-area{
+    background: transparent !important;
+    height: 50px;
+    position:absolute;
+    right:0;
+    top:0;
+    cursor:move;
+}
+.flexible-modal-drag-area-left, .flexible-modal-drag-area-bottom, .flexible-modal-drag-area-right{
+    display: none;
+}
+.songAnalysisTop{
+    height: 55px;
+    width: 100%;
+    font-size: 40px;
+    font-weight: 700;
+    margin: 9px 0 25px 0;
+    padding: 0;
+    text-align: center;
+}
+.songAnalysisTop p{
+    margin: 0;
+}
+.songAnalysisBody{
+    width: 85%;
+    height: 245px;
+    margin-left: 16%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+}
+.closeModal{
+    background-color: #1DB954;
+    border: none;
+    height: 40px;
+    width: 250px;
+    border-radius: 15px;
+    margin-left: calc((100% - 260px) / 2);
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
 }

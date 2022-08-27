@@ -1,15 +1,18 @@
 import {useEffect, useState} from "react"
 import React from 'react'
-import useAuth from './useAuth'
 import SpotifyWebApi from "spotify-web-api-node"
 import axios from "axios"
-import "./Dashboard.css"
-import { useColor } from 'color-thief-react'
 import SpotifyPlayer from "react-spotify-web-playback"
+import "./Dashboard.css"
+import useAuth from './useAuth'
+import Song from './Song'
+import SongPage from "./SongPage"
+import  {NoResults} from "./Errors"
+import  {TimeOut}  from "./Errors"
 
 
 
-const SpotifyApi = new SpotifyWebApi({
+export const SpotifyApi = new SpotifyWebApi({
     clientId: '9e4da4d22c754a95860f01b0d9423ead'
 });
 
@@ -60,6 +63,7 @@ export default function Dashboard(props) {
                             <Song key = {item.id}
                             name = {name}
                             album = {album}
+                            id = {item.id}
                             artists = {artists}
                             uri = {item.uri}
                             albumUrl = {image.url}
@@ -90,6 +94,7 @@ export default function Dashboard(props) {
                                         name = {name}
                                         album = {album}
                                         artists = {artists}
+                                        accessToken = {accessToken}
                                         artist = {item.artists[0].name}
                                         uri = {item.uri}
                                         albumUrl = {imageBig.url}
@@ -164,6 +169,7 @@ export default function Dashboard(props) {
                                 name = {name}
                                 album = {album}
                                 artists = {artists}
+                                id = {item.id}
                                 uri = {item.uri}
                                 albumUrl = {image.url}
                                 popularity = {item.popularity}
@@ -193,6 +199,7 @@ export default function Dashboard(props) {
                                             name = {name}
                                             album = {album}
                                             artists = {artists}
+                                            accessToken = {accessToken}
                                             artist = {item.artists[0].name}
                                             uri = {item.uri}
                                             albumUrl = {imageBig.url}
@@ -216,6 +223,7 @@ export default function Dashboard(props) {
         })
         return () => cancel = true;
     }, [page]);
+
 
     let invisible = {}
     let invisible2 = {}
@@ -317,153 +325,7 @@ export default function Dashboard(props) {
     )
 }
 
-function Song(props){
-    let exp;
-    if(props.explicit)
-        exp = <span className="explicit inline"><span>E</span></span>;
-    let tSec = props.time/1000;
-    let sec = Math.trunc(tSec%60);
-    sec = sec.toString().length == 1 ? "0"+sec : sec;
-    let min = Math.trunc(tSec/60);
 
-    return(
-        <div className="song">
-            <div className="pageClick inline" onClick={props.mainClick}>
-                <img className="songCover inline" src = {props.albumUrl}/>
-                <div className="songNA inline">
-                    <p className="songName">{props.name}</p>
-                    <p className="songArtists">{exp}{props.artists}</p>
-                </div>
-                <span className="songAlbum inline">{props.album}</span>
-                <span className="songPop inline">{props.popularity}  </span>
-                <span className="songTime inline">{min}<span>:</span>{sec}</span>
-            </div>
-            <div className="buttons inline">
-                <div onClick = {props.playClick} className="play inline" title="play"><i className="fa-solid fa-play fa-xl playIcon inline" title='Play'></i></div>
-                <div className="analysis inline"><i className="fa-solid fa-calculator fa-2xl analIcon inline"></i></div>
-            </div>
-        </div>
-    );
-}
 
-function SongPage(props){
-    let {data, loading, error} = useColor(props.albumUrl, 'hex',{crossOrigin: 'anonymous', quality: '50'})
-    data = data +"";
-    let red = parseInt(data.substring(1,3), 16);
-    let green = parseInt(data.substring(3,5), 16);
-    let blue = parseInt(data.substring(5,7), 16);
-    let primaryColor = (red*0.299 + green*0.587 + blue*0.114) > 130 ? '#000000' : '#ffffff';
-    let oppPrimaryColor = (red*0.299 + green*0.587 + blue*0.114) > 130 ?  '#ffffff' : '#000000';
-    let secondaryColor = (red*0.299 + green*0.587 + blue*0.114) > 130 ? '#333' : '#aaaaaa';
 
-    const [lyrics, setLyrics] = useState("")
-    const [features, setFeatures] = useState({})
-    const [firstRender, setFirstRender] = useState(true);
-    const [lock, setLock] = useState(false);
-    const artist = props.artist.indexOf("(") === -1 ? props.artist : props.artist.substring(0, props.artist.indexOf("("));
-    if(firstRender){
-        setFirstRender(false);
-        axios
-            .get('http://localhost:3001/lyrics', {
-                params: {
-                    track: props.name,
-                    artist: artist,
-                },
-                })
-                .then(res => {
-                    setLyrics(res.data.lyrics);
-                })
-        SpotifyApi.getAudioFeaturesForTrack(props.id).then((res) => {console.log(res.body); setFeatures(res.body)})
-    }
 
-    let artIcon;
-    let albMargin;
-    if(props.artists.length === 1){
-        artIcon = <i className="fa-solid fa-user fa-sm userIcon"></i>;
-        albMargin = {margin: '0px 8.5px 0px 15px'}
-    }
-    else{
-        artIcon = <i className="fa-solid fa-users fa-sm usersIcon"></i>;
-        albMargin = {margin: '0px 11px 0px 15.5px'}
-    }
-    
-    let exp;
-    if(props.explicit)
-        exp = <span className="explicit inline"><span>E</span></span>;
-    let analysisStyle = {color: primaryColor};
-    if(lock){
-        analysisStyle.height = '280px';
-        analysisStyle.width = '350px';
-    }
-    return(
-        <div className='pageTopTop' style={{ background: `linear-gradient(${data} 150px, #191414 400px)`, color: primaryColor}}>
-            <div className="pageTop">
-                <div className="pageArr inline" onClick={props.backClick}><i className="fa-solid fa-arrow-left fa-2xl inline"></i></div>
-                <img className="pageCover inline" src = {props.albumUrl}/>
-                <div className="pageNAA inline">
-                    <p className="pageName">{props.name}</p>
-                    <p className="pageAlbum" style={{color: secondaryColor}}>
-                        <i className="fa-solid fa-compact-disc fa-sm albumIcon inline" style = {albMargin}></i>
-                        {props.album}
-                    </p>
-                    <div className="pageArtists" style={{color: secondaryColor}}>{artIcon}{props.artists}</div>
-                </div>
-                <div className="pageAnalysis inline" style={analysisStyle} onClick={() => {setLock(!lock)}}>
-                    <div className="pageAnalysisTop inline"><p>Analysis</p></div>
-                    <div className="pageAnalysisBody inline">
-                        <span><span>Instrumentalness:</span> {(features.instrumentalness*100).toFixed(2)}</span>
-                        <span><span>Acousticness:</span> {(features.acousticness*100).toFixed(2)}</span>
-                        <span><span>Danceability:</span> {(features.danceability*100).toFixed(2)}</span>
-                        <span><span>Speechiness:</span> {(features.speechiness*100).toFixed(2)}</span>
-                        <span><span>Liveness:</span> {(features.liveness*100).toFixed(2)}</span>
-                        <span><span>Energy:</span> {(features.energy*100).toFixed(2)}</span>
-                        <span><span>Time Signature:</span> {features.time_signature}</span>
-                        <span><span>Loudness:</span> {features.loudness}</span>
-                        <span><span>Duration:</span> {features.duration_ms}</span>
-                        <span><span>Valence:</span> {features.valence}</span>
-                        <span><span>Tempo:</span> {features.tempo}</span>
-                        <span><span>Key:</span> {features.key}</span>
-                    </div>
-                </div>
-            </div>
-            <div className="pageLyrics" style={{whiteSpace: 'pre'}}>
-                {lyrics}
-            </div>
-            <div className="playbackDiv">
-                <SpotifyPlayer 
-                    token={props.token}
-                    play={true}
-                    autoPlay={false}
-                    uris={props.uri ? [props.uri] : []}
-                    styles={{
-                        bgColor: '#1d1717',
-                        color: '#fff',
-                        loaderColor: 'grey',
-                        sliderColor: '#1DB954',
-                        trackArtistColor: '#a5a5a5',
-                        trackNameColor: '#fff',
-                        sliderTrackColor: 'grey'
-                        }}
-                    />
-            </div>
-        </div>
-    )
-}
-
-function TimeOut(props){
-    return(
-        <div className="error">
-            <p>Your Search Timed Out</p>
-            <p>Please Try Again</p>
-        </div>
-    )
-}
-
-function NoResults(props){
-    return(
-        <div className="error">
-            <p>No Results</p>
-            <p>Please Try Again</p>
-        </div>
-    )
-}
