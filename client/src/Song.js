@@ -42,6 +42,8 @@ export default function Song(props){
                 <ReactModal 
                     initWidth={500} 
                     initHeight={395}
+                    top='100px'
+                    left='100px'
                     disableResize = 'true'
                     disableKeystroke = 'true'
                     onFocus={() => console.log("Modal is clicked")}

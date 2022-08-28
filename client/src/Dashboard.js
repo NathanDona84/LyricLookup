@@ -25,6 +25,8 @@ export default function Dashboard(props) {
     const [page, setPage] = useState(1);
     const [stop, setStop] = useState(false);
     const [playback, setPlayback] = useState(undefined);
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [scroll, setScroll] = useState(true);
 
 
     useEffect(() => {
@@ -59,8 +61,9 @@ export default function Dashboard(props) {
                     const album = item.album.name.indexOf("(") === -1 ? item.album.name : item.album.name.substring(0, item.album.name.indexOf("("));
                     const artists = item.artists.map((elem, i, arr) => {return i==arr.length-1 ? (<span>{elem.name}</span>) : (<span>{elem.name}, </span>)});
                     return(
-                        <li key = {item.id} className="songElement">
-                            <Song key = {item.id}
+                        <li key = {item.id+"00"} className="songElement">
+                            <Song 
+                            key = {item.id}
                             name = {name}
                             album = {album}
                             id = {item.id}
@@ -164,8 +167,9 @@ export default function Dashboard(props) {
                         
                         
                         return(
-                            <li key = {item.id} className="songElement">
-                                <Song key = {item.id}
+                            <li key = {item.id+"00"} className="songElement">
+                                <Song 
+                                key = {item.id}
                                 name = {name}
                                 album = {album}
                                 artists = {artists}
@@ -224,6 +228,13 @@ export default function Dashboard(props) {
         return () => cancel = true;
     }, [page]);
 
+    useEffect(() => {
+        window.addEventListener("scroll", () => {setScrollPosition(window.pageYOffset)})
+    
+        return () => {
+          window.removeEventListener("scroll", () => {setScrollPosition(window.pageYOffset)});
+        };
+      }, []);
 
     let invisible = {}
     let invisible2 = {}
@@ -238,6 +249,11 @@ export default function Dashboard(props) {
     if(result.length === 1 && page!=1){
         invisible2={}
     }
+    if(scrollPosition > 365)
+        invisible = {zIndex: '9'}
+    let scrollStyle;
+    if(scrollPosition > 200)
+        scrollStyle = {zIndex: '10'}
 
 
     let bottomMargin={}
@@ -247,9 +263,7 @@ export default function Dashboard(props) {
     else
         noDisplay = {display: 'none'}
 
-
     if(selected){
-        window.scrollTo(0, 0);
         return (
             <div>
                 {selected}
@@ -264,12 +278,12 @@ export default function Dashboard(props) {
             let temp = {}
             if(i === page)
                 temp = {color: '#1DB954', fontSize: '20px'}
-            pages.push(<span className="pages inline" style={temp} onClick={() => setPage(i)}>{i}</span>)
+            pages.push(<span key={i} className="pages inline" style={temp} onClick={() => setPage(i)}>{i}</span>)
         }
     }
     else{
-        pages.push(<span className="pages inline" onClick={() => setPage(1)}>1</span>);
-        pages.push(<span className="pagesDots inline" >...</span>);
+        pages.push(<span key='1' className="pages inline" onClick={() => setPage(1)}>1</span>);
+        pages.push(<span key='dots1' className="pagesDots inline" >...</span>);
         let index = Math.trunc(page/10);
         if(page%10 === 0)
             index--;
@@ -281,18 +295,18 @@ export default function Dashboard(props) {
                 temp = {color: '#1DB954', fontSize: '20px'}
             pages.push(<span className="pages inline" style={temp} onClick={() => setPage(i)}>{i}</span>)
         }
-        pages.push(<span className="pagesDots inline" >...</span>);
-        pages.push(<span className="pages inline" onClick={() => setPage(index+19)}>{index+19}</span>);
+        pages.push(<span key='dots2' className="pagesDots inline" >...</span>);
+        pages.push(<span key={index+19} className="pages inline" onClick={() => setPage(index+19)}>{index+19}</span>);
     }
 
-
+    
     return(
     <div>
         <div className="dashTop">
             <p className="dashTitle">Lyric Lookup</p>
         </div>
         <div className="dashSearch">
-            <div className="search">
+            <div className="search" style={scrollStyle}>
                 <i className="fa-solid fa-magnifying-glass fa-lg searchIcon"></i>
                 <input 
                 className="input"
@@ -301,7 +315,7 @@ export default function Dashboard(props) {
                 value={input} 
                 onChange={(event) => {setInput(event.target.value);}}/>
             </div>
-            <div className="searchBlock" style={invisible}></div>
+            <div className="searchBlock" style={invisible} ></div>
             <div className="listCats" style={invisible}>
                 <span className="catTitle inline">Title</span>
                 <span className="catAlbum inline">Album</span>

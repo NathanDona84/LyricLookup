@@ -23,6 +23,7 @@ export default function SongPage(props){
     const artist = props.artist.indexOf("(") === -1 ? props.artist : props.artist.substring(0, props.artist.indexOf("("));
     if(firstRender){
         setFirstRender(false);
+        window.scrollTo(0,0);
         axios
             .get('http://localhost:3001/lyrics', {
                 params: {
@@ -51,11 +52,15 @@ export default function SongPage(props){
     if(props.explicit)
         exp = <span className="explicit inline"><span>E</span></span>;
 
+    
     let analysisStyle = {color: primaryColor, backgroundColor: oppPrimaryColor+"77"};
+    let lockIcon;
     if(lock){
         analysisStyle.height = '280px';
         analysisStyle.width = '350px';
+        analysisStyle.position = 'fixed';
         analysisStyle.visibility = 'visible';
+        lockIcon = <i className="fa-solid fa-lock fa-2xs inline lockIcon"></i>;
     }
     return(
         <div className='pageTopTop' style={{ background: `linear-gradient(${data} 150px, #191414 400px)`, color: primaryColor}}>
@@ -71,7 +76,10 @@ export default function SongPage(props){
                     <div className="pageArtists" style={{color: secondaryColor}}>{artIcon}{props.artists}</div>
                 </div>
                 <div className="pageAnalysis inline" style={analysisStyle} onClick={() => {setLock(!lock)}}>
-                    <div className="pageAnalysisTop inline"><p>Analysis</p></div>
+                    <div className="pageAnalysisTop inline">
+                        {lockIcon}
+                        <p>Analysis</p>
+                        </div>
                     <div className="pageAnalysisBody inline">
                         <span><span>Instrumentalness:</span> {(features.instrumentalness*100).toFixed(2)}</span>
                         <span><span>Acousticness:</span> {(features.acousticness*100).toFixed(2)}</span>
